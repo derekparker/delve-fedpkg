@@ -1,0 +1,29 @@
+From de6682d29149cc8f2131d295d68a5e3d65102590 Mon Sep 17 00:00:00 2001
+From: Derek Parker <parkerderek86@gmail.com>
+Date: Fri, 4 Jan 2019 02:03:16 -0800
+Subject: [PATCH] pkg/proc/test: Eval symlinks for test source (#1452)
+
+Some build environments (such as when building RPMs) enjoy symlinking
+things. This unfortunately causes our tests to fail as we record the
+path of fixtures and use that when looking up file:line information.
+However, the debug info in the binary records the original file
+location, not the location of the symlink.
+---
+ pkg/proc/test/support.go | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/pkg/proc/test/support.go b/pkg/proc/test/support.go
+index 733bad85..5f4a4127 100644
+--- a/pkg/proc/test/support.go
++++ b/pkg/proc/test/support.go
+@@ -150,6 +150,10 @@ func BuildFixture(name string, flags BuildFlags) Fixture {
+ 
+ 	source, _ := filepath.Abs(path)
+ 	source = filepath.ToSlash(source)
++	sympath, err := filepath.EvalSymlinks(source)
++	if err == nil {
++		source = strings.Replace(sympath, "\\", "/", -1)
++	}
+ 
+ 	fixture := Fixture{Name: name, Path: tmpfile, Source: source}
+ 
