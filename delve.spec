@@ -25,6 +25,7 @@ Source0:        %{gosource}
 
 Patch1: ./eval-symlink-in-test.patch
 Patch2: ./test-fixture-vendor-to-internal.patch
+Patch3: ./doc-location.patch
 
 BuildRequires: golang(github.com/cosiner/argv)
 BuildRequires: golang(github.com/mattn/go-isatty)
@@ -54,10 +55,7 @@ building other packages which use import path with
 
 
 %prep
-%forgesetup
-
-%patch1 -p1
-%patch2 -p1
+%forgeautosetup -p1
 
 rm -rf vendor/
 
