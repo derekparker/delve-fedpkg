@@ -1,9 +1,9 @@
 # Run tests in check section
 %bcond_without check
 
-# https://github.com/derekparker/delve
-%global goipath         github.com/derekparker/delve
-Version:                1.1.0
+# https://github.com/go-delve/delve
+%global goipath         github.com/go-delve/delve
+Version:                1.2.0
 
 %global common_description %{expand:
 Delve is a debugger for the Go programming language. The goal of the project 
@@ -22,10 +22,6 @@ Summary:        A debugger for the Go programming language
 License:        MIT
 URL:            %{gourl}
 Source0:        %{gosource}
-
-Patch1: ./eval-symlink-in-test.patch
-Patch2: ./test-fixture-vendor-to-internal.patch
-Patch3: ./doc-location.patch
 
 BuildRequires: golang(github.com/cosiner/argv)
 BuildRequires: golang(github.com/mattn/go-isatty)
@@ -88,5 +84,5 @@ install -Dpm 0755 _bin/dlv %{buildroot}%{_bindir}/dlv
 
 
 %changelog
-* Fri Nov 2 2018 Derek Parker <deparker@redhat.com> - 1.1.0-1
+* Fri Nov 2 2018 Derek Parker <deparker@redhat.com> - 1.2.0-1
 - First package for Fedora
