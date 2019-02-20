@@ -1,0 +1,27 @@
+From c4a4e442e2eee35bc26674cb1d2cb28336780891 Mon Sep 17 00:00:00 2001
+From: Derek Parker <deparker@redhat.com>
+Date: Wed, 20 Feb 2019 14:01:13 -0800
+Subject: [PATCH] service/test: Follow symlinks in integration tests
+
+---
+ service/test/common_test.go | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/service/test/common_test.go b/service/test/common_test.go
+index 2b58e371a12472c71beaad0790b001cf4258934c..ee56a53350a45ab790229dd359c472f2c9a952b0 100644
+--- a/service/test/common_test.go
++++ b/service/test/common_test.go
+@@ -52,6 +52,10 @@ func testProgPath(t *testing.T, name string) string {
+ 			t.Fatal(err)
+ 		}
+ 	}
++	sympath, err := filepath.EvalSymlinks(fp)
++	if err == nil {
++		fp = strings.Replace(sympath, "\\", "/", -1)
++	}
+ 	return fp
+ }
+ 
+-- 
+2.16.5
+

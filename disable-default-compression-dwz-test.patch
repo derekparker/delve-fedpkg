@@ -1,0 +1,36 @@
+From 1f9597d3ca2e7d3497f9d28046bbae5522742306 Mon Sep 17 00:00:00 2001
+From: Derek Parker <deparker@redhat.com>
+Date: Wed, 20 Feb 2019 13:26:18 -0800
+Subject: [PATCH] pkg/proc: Disable default compression on DWZ test
+
+When compression is applied by default running the DWZ tool on the
+resulting binary will crash.
+
+The actual default compression code will look and see if compression
+makes any difference and if so replace the normal `.debug_*` section
+with `.zdebug_*`. This is why it may not have been hit before. On one of
+my workstations I build with 1.12rc1 and no compression happens, but on
+a Fedora VM I build and the binary results in compressed DWARF sections.
+
+Adding this flag will make this test more consistent overall.
+---
+ pkg/proc/test/support.go | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/pkg/proc/test/support.go b/pkg/proc/test/support.go
+index 9e09da861ec53657bfa0fb9cf76620a4fcd485dc..ccfc1c4939ef6e9c8abbbc67f4fbeaaf0e623de1 100644
+--- a/pkg/proc/test/support.go
++++ b/pkg/proc/test/support.go
+@@ -125,6 +125,9 @@ func BuildFixture(name string, flags BuildFlags) Fixture {
+ 	if flags&BuildModePIE != 0 {
+ 		buildFlags = append(buildFlags, "-buildmode=pie")
+ 	}
++	if flags&EnableDWZCompression != 0 {
++		buildFlags = append(buildFlags, "-ldflags=-compressdwarf=false")
++	}
+ 	if path != "" {
+ 		buildFlags = append(buildFlags, name+".go")
+ 	}
+-- 
+2.16.5
+

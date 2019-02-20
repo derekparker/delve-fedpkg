@@ -23,6 +23,9 @@ License:        MIT
 URL:            %{gourl}
 Source0:        %{gosource}
 
+Patch1: ./disable-default-compression-dwz-test.patch
+Patch2: ./integration-test-symlinks.patch
+
 BuildRequires: golang(github.com/cosiner/argv)
 BuildRequires: golang(github.com/mattn/go-isatty)
 BuildRequires: golang(github.com/peterh/liner)
@@ -68,7 +71,17 @@ install -Dpm 0755 _bin/dlv %{buildroot}%{_bindir}/dlv
 
 %if %{with check}
 %check
-%gochecks
+# Copy to $GOPATH since modules aren't supported.
+export GOPATH=%{gopath}
+export GO111MODULE=off
+mkdir -p %{gopath}/src/$(dirname %{goipath})
+ln -s $(pwd)/. %{gopath}/src/%{goipath}
+cd %{gopath}/src/%{goipath}
+for i in $(go list ./... | grep -v scripts | grep -v cmd); do
+  pushd .${i##%{goipath}}
+    %{gotest}
+  popd
+done
 %endif
 
 
