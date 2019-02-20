@@ -71,17 +71,7 @@ install -Dpm 0755 _bin/dlv %{buildroot}%{_bindir}/dlv
 
 %if %{with check}
 %check
-# Copy to $GOPATH since modules aren't supported.
-export GOPATH=%{gopath}
-export GO111MODULE=off
-mkdir -p %{gopath}/src/$(dirname %{goipath})
-ln -s $(pwd)/. %{gopath}/src/%{goipath}
-cd %{gopath}/src/%{goipath}
-for i in $(go list ./... | grep -v scripts | grep -v cmd); do
-  pushd .${i##%{goipath}}
-    %{gotest}
-  popd
-done
+%gochecks
 %endif
 
 
