@@ -25,6 +25,7 @@ Source0:        %{gosource}
 
 Patch1: ./disable-default-compression-dwz-test.patch
 Patch2: ./integration-test-symlinks.patch
+Patch3: ./clean-empty-doc.patch
 
 BuildRequires: golang(github.com/cosiner/argv)
 BuildRequires: golang(github.com/mattn/go-isatty)

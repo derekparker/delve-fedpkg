@@ -1,0 +1,16 @@
+From 9cb76893334154001489fb1bbd19fe926f0249e7 Mon Sep 17 00:00:00 2001
+From: Derek Parker <deparker@redhat.com>
+Date: Thu, 21 Feb 2019 12:15:37 -0800
+Subject: [PATCH] Documentation: Remove empty doc file
+
+---
+ Documentation/usage/commands.md | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ delete mode 100644 Documentation/usage/commands.md
+
+diff --git a/Documentation/usage/commands.md b/Documentation/usage/commands.md
+deleted file mode 100644
+index e69de29bb2d1d6434b8b29ae775ad8c2e48c5391..0000000000000000000000000000000000000000
+-- 
+2.16.5
+
